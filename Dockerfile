@@ -16,3 +16,4 @@ RUN if [ -f /comfyui/custom_nodes/ComfyUI-GGUF/requirements.txt ]; then \
 RUN if [ -f /comfyui/custom_nodes/ComfyUI-Qwen3-TTS/requirements.txt ]; then \
       pip install --no-cache-dir -r /comfyui/custom_nodes/ComfyUI-Qwen3-TTS/requirements.txt; \
     fi
+# trigger build
