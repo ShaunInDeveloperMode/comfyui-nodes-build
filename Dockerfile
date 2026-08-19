@@ -30,3 +30,12 @@ RUN echo "=== extra_model_paths.yaml presence check ===" \
     && (grep -rn "extra_model_paths" /comfyui/main.py /comfyui/folder_paths.py /comfyui/utils/extra_config.py 2>/dev/null || echo "no references found in expected files") \
     && echo "=== end diagnostic ==="
 # trigger build
+
+# Runtime mount check -- deliberately NOT a RUN/build-time step. A network
+# volume only gets mounted once the container actually starts (matches
+# RunPod's own attach/mount lifecycle), so a build-time `ls /runpod-volume`
+# would always show nothing regardless of whether the real runtime mount
+# works. This wraps the base image's real entrypoint (confirmed /start.sh
+# from runpod-workers/worker-comfyui's own Dockerfile) so the check runs on
+# every real boot and lands in the worker's runtime Logs tab, not Builds.
+CMD ["sh", "-c", "echo '=== RUNTIME MOUNT CHECK ===' && ls -la / && echo '=== df -h ===' && df -h && echo '=== end runtime check ===' && exec /start.sh"]
